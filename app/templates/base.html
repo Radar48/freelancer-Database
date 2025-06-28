@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Freelancer Tracker{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h2>💼 Freelancer Income Tracker</h2>
+        {% if current_user.is_authenticated %}
+            <p>Welcome, {{ current_user.username }} | <a href="{{ url_for('routes.logout') }}">Logout</a></p>
+        {% endif %}
+    </header>
+    <hr>
+    {% block content %}{% endblock %}
+</body>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="flash-message">
+      {% for message in messages %}
+        <div class="alert">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+</html>

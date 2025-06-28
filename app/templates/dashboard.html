@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<h2>Hello, {{ username }} 👋</h2>
+
+<p><strong>Total Income:</strong> {{ user_currency }} {{ "%.2f"|format(total_income) }}</p>
+<p><strong><i class="fas fa-spark"></i> Lucrative Platform:</strong> {{ most_lucrative_platform }}</p>
+<p><strong><i class="fas fa-spark"></i> Most Used Platform:</strong> {{ most_used_platform }}</p>
+<p><strong><i class="fas fa-trophy bounce"></i> Highest Single Entry:</strong> {{ user_currency }} {{ "%.2f"|format(highest_amount) }}</p>
+
+<form method="GET" action="{{ url_for('routes.dashboard') }}">
+
+  <label for="chart_type">Chart by:</label>
+  <select name="chart_type" id="chart_type">
+    <option value="platform" {% if chart_type == 'platform' %}selected{% endif %}>Platform</option>
+    <option value="category" {% if chart_type == 'category' %}selected{% endif %}>Category</option>
+  </select>
+
+
+
+  <label for="month">Month:</label>
+  <select name="month" id="month">
+    <option value="">All</option>
+    {% for m in range(1, 13) %}
+      <option value="{{ m }}" {% if m == selected_month %}selected{% endif %}>
+        {{ date(2023, m, 1).strftime('%B') }}
+      </option>
+    {% endfor %}
+  </select>
+
+ 
+
+  <label for="year">Year:</label>
+  <select name="year" id="year">
+    <option value="">All</option>
+    {% for y in range(2021, 2030) %}
+      <option value="{{ y }}" {% if y == selected_year %}selected{% endif %}>{{ y }}</option>
+    {% endfor %}
+  </select>
+
+  <button type="submit">Update</button>
+</form>
+
+
+
+
+<a href="{{ url_for('routes.add_entry') }}" class="add-button">➕ Add New Entry</a>
+
+
+<div class="chart-container">
+  <h3>Income by {{ chart_type.capitalize() }}</h3>
+  {{ chart_html|safe }}
+</div>
+
+<h3>Recent Entries</h3>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Platform</th>
+      <th>Category</th>
+      <th>Amount</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for entry in entries %}
+    <tr>
+      <td>{{ entry.date }}</td>
+      <td>{{ entry.platform.name if entry.platform else 'N/A' }}</td>
+      <td>{{ entry.category.name if entry.category else 'N/A' }}</td>
+      <td>{{ user_currency }} {{ "%.2f"|format(entry.amount) }}</td>
+      <td>{{ entry.description or '' }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="export-buttons">
+  <div class="export-group">
+  <form method="GET" action="{{ url_for('routes.export_data') }}">
+    <input type="hidden" name="format" value="csv">
+    <button type="submit">📁 Export CSV</button>
+  </form>
+  <form method="GET" action="{{ url_for('routes.export_data') }}">
+    <input type="hidden" name="format" value="pdf">
+    <button type="submit">📝 Export PDF</button>
+  </form>
+  </div>
+  <form method="POST" action="{{ url_for('routes.clear_all_entries') }}">
+    <button type="submit" onclick="return confirm('Are you sure you want to delete all entries?')">
+        🧹 Clear All Entries
+    </button>
+</form>
+
+{% endblock %}

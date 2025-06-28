@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<h3>Login</h3>
+<form method="POST">
+    <label>Email:</label><input type="email" name="email"><br>
+    <label>Password:</label><input type="password" name="password"><br>
+    <label for="currency">Preferred Currency:</label>
+<select name="currency" id="currency" required>
+  <option value="" disabled selected>Select your currency</option>
+  <option value="USD">USD ($)</option>
+  <option value="KES">KES (KSh)</option>
+  <option value="EUR">EUR (€)</option>
+  <option value="GBP">GBP (£)</option>
+</select>
+    <button type="submit">Log In</button>
+</form>
+<p>New here? <a href="{{ url_for('routes.register') }}">Create an account</a></p>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Add Income Entry{% endblock %}
+{% block content %}
+
+<h2 style="text-align: center;">Add Income Entry</h2>
+
+
+
+<form method="POST" class="income-entry-form">
+  <label for="amount">Amount:</label>
+  <input type="number" name="amount" step="0.01" required>
+
+  <label for="date">Date:</label>
+  <input type="date" name="date">
+
+  <label for="platform_id">Platform:</label>
+  <select name="platform_id" required>
+    {% for platform in platforms %}
+      <option value="{{ platform.platform_id }}">{{ platform.name }}</option>
+    {% endfor %}
+  </select>
+  <div id="customPlatformWrapper" style="display: none; margin-top: 8px;">
+  <input type="text" name="custom_platform" placeholder="Enter platform name" />
+</div>
+
+  <label for="category_id">Category:</label>
+  <select name="category_id" required>
+    {% for category in categories %}
+      <option value="{{ category.category_id }}">{{ category.name }}</option>
+    {% endfor %}
+  </select>
+  <div id="customCategoryWrapper" style="display: none; margin-top: 8px;">
+  <input type="text" name="custom_category" placeholder="Enter category name" />
+</div>
+
+  <label for="description">Description (optional):</label>
+  <input type="text" name="description">
+
+  <button type="submit">➕ Add Entry</button>
+</form>
+<script>
+  const platformSelect = document.querySelector('select[name="platform_id"]');
+  const customPlatform = document.getElementById('customPlatformWrapper');
+  const categorySelect = document.querySelector('select[name="category_id"]');
+  const customCategory = document.getElementById('customCategoryWrapper');
+
+  platformSelect.addEventListener('change', () => {
+    customPlatform.style.display = platformSelect.options[platformSelect.selectedIndex].text === "Other" ? "block" : "none";
+  });
+
+  categorySelect.addEventListener('change', () => {
+    customCategory.style.display = categorySelect.options[categorySelect.selectedIndex].text === "Other" ? "block" : "none";
+  });
+</script>
+
+{% endblock %}
