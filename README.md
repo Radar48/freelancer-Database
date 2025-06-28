@@ -1,7 +1,7 @@
 # Freelancer Income Tracker 💼
 
 A Flask + Plotly web app to track freelance earnings by platform, category, and date.  
-Built by [your name], with support for dynamic entries, visualizations, and data exports.
+Built by [Lucy(Radar48)], with support for dynamic entries, visualizations, and data exports.
 
 
 ## Features
